@@ -1,0 +1,27 @@
+{% import '_includes/forms.twig' as forms %}
+
+{{ forms.lightswitchField({
+    label: 'Manage Craft system messages'|t('mail-studio'),
+    instructions: 'Allow published Mail Studio templates to replace explicitly mapped Craft system messages.'|t('mail-studio'),
+    id: 'enableSystemMessages',
+    name: 'enableSystemMessages',
+    on: old('enableSystemMessages', settings.enableSystemMessages),
+    errors: settings.errors().get('enableSystemMessages'),
+}) }}
+
+{{ forms.lightswitchField({
+    label: 'Enable Freeform adapter'|t('mail-studio'),
+    instructions: 'Available in the Pro edition when Freeform is installed.'|t('mail-studio'),
+    id: 'enableFreeform',
+    name: 'enableFreeform',
+    on: old('enableFreeform', settings.enableFreeform),
+    errors: settings.errors().get('enableFreeform'),
+}) }}
+
+{{ forms.textField({
+    label: 'Default locale'|t('mail-studio'),
+    id: 'defaultLocale',
+    name: 'defaultLocale',
+    value: old('defaultLocale', settings.defaultLocale),
+    errors: settings.errors().get('defaultLocale'),
+}) }}

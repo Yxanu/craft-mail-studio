@@ -1,0 +1,34 @@
+{
+  "_editor-NHJoZb0-.js": {
+    "file": "assets/editor-NHJoZb0-.js",
+    "name": "editor",
+    "imports": [
+      "_vue-Dlqg5U5b.js"
+    ]
+  },
+  "_utilities-BGDfrmOw.js": {
+    "file": "assets/utilities-BGDfrmOw.js",
+    "name": "utilities",
+    "imports": [
+      "_vue-Dlqg5U5b.js"
+    ]
+  },
+  "_vue-Dlqg5U5b.js": {
+    "file": "assets/vue-Dlqg5U5b.js",
+    "name": "vue"
+  },
+  "resources/js/app.ts": {
+    "file": "assets/app-B5RkhGc7.js",
+    "name": "app",
+    "src": "resources/js/app.ts",
+    "isEntry": true,
+    "imports": [
+      "_vue-Dlqg5U5b.js",
+      "_utilities-BGDfrmOw.js",
+      "_editor-NHJoZb0-.js"
+    ],
+    "css": [
+      "assets/app-DCCEXcla.css"
+    ]
+  }
+}

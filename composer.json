@@ -1,0 +1,65 @@
+{
+    "$schema": "https://getcomposer.org/schema.json",
+    "name": "yxanu/craft-mail-studio",
+    "description": "Source-aware transactional email templates for Craft CMS 6.",
+    "type": "craft-plugin",
+    "license": "proprietary",
+    "keywords": [
+        "craftcms",
+        "email",
+        "templates",
+        "transactional-email"
+    ],
+    "support": {
+        "docs": "https://github.com/Yxanu/craft-mail-studio/blob/main/README.md",
+        "issues": "https://github.com/Yxanu/craft-mail-studio/issues",
+        "source": "https://github.com/Yxanu/craft-mail-studio"
+    },
+    "require": {
+        "php": "^8.5",
+        "craftcms/cms": "^6.0.0"
+    },
+    "require-dev": {
+        "laravel/pint": "^1.27",
+        "phpunit/phpunit": "^12.5"
+    },
+    "suggest": {
+        "solspace/craft-freeform": "Adds the Pro Freeform notification adapter."
+    },
+    "autoload": {
+        "psr-4": {
+            "Yxanu\\MailStudio\\": "src/"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "Yxanu\\MailStudio\\Tests\\": "tests/"
+        }
+    },
+    "extra": {
+        "handle": "mail-studio",
+        "name": "Mail Studio",
+        "description": "Manage transactional email content from the Craft control panel.",
+        "developer": "Yxanu",
+        "developerUrl": "https://github.com/Yxanu",
+        "documentationUrl": "https://github.com/Yxanu/craft-mail-studio/blob/main/README.md",
+        "changelogUrl": "https://raw.githubusercontent.com/Yxanu/craft-mail-studio/main/CHANGELOG.md",
+        "class": "Yxanu\\MailStudio\\MailStudio",
+        "schemaVersion": "0.1.0",
+        "laravel": {
+            "providers": [
+                "Yxanu\\MailStudio\\MailStudioServiceProvider"
+            ]
+        }
+    },
+    "config": {
+        "allow-plugins": {
+            "craftcms/plugin-installer": true
+        },
+        "sort-packages": true
+    },
+    "scripts": {
+        "test": "phpunit",
+        "lint": "pint --test"
+    }
+}
