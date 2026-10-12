@@ -7,6 +7,8 @@ on:
 jobs:
   test:
     runs-on: ubuntu-latest
+    env:
+      COMPOSER_VENDOR_DIR: ${{ github.workspace }}/vendor
     steps:
       - uses: actions/checkout@v4
       - uses: shivammathur/setup-php@v2
