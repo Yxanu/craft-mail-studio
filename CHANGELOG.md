@@ -1,5 +1,9 @@
 # Release Notes for Mail Studio
 
+## Unreleased
+
+- Added the wolkano cloud-envelope plugin icon and control panel navigation mask.
+
 ## 0.1.0-alpha.2 - 2026-10-12
 
 - Renamed the Composer package to `wolkano/craft-mail-studio` and identified wolkano as the publisher.
