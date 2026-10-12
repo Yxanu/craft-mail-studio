@@ -1,9 +1,16 @@
 {
     "$schema": "https://getcomposer.org/schema.json",
-    "name": "yxanu/craft-mail-studio",
+    "name": "wolkano/craft-mail-studio",
     "description": "Source-aware transactional email templates for Craft CMS 6.",
     "type": "craft-plugin",
     "license": "proprietary",
+    "authors": [
+        {
+            "name": "wolkano",
+            "email": "dev@tosa.io",
+            "role": "Developer"
+        }
+    ],
     "keywords": [
         "craftcms",
         "email",
@@ -11,6 +18,7 @@
         "transactional-email"
     ],
     "support": {
+        "email": "dev@tosa.io",
         "docs": "https://github.com/Yxanu/craft-mail-studio/blob/main/README.md",
         "issues": "https://github.com/Yxanu/craft-mail-studio/issues",
         "source": "https://github.com/Yxanu/craft-mail-studio"
@@ -40,8 +48,8 @@
         "handle": "mail-studio",
         "name": "Mail Studio",
         "description": "Manage transactional email content from the Craft control panel.",
-        "developer": "Yxanu",
-        "developerUrl": "https://github.com/Yxanu",
+        "developer": "wolkano",
+        "developerUrl": "https://github.com/Yxanu/craft-mail-studio",
         "documentationUrl": "https://github.com/Yxanu/craft-mail-studio/blob/main/README.md",
         "changelogUrl": "https://raw.githubusercontent.com/Yxanu/craft-mail-studio/main/CHANGELOG.md",
         "class": "Yxanu\\MailStudio\\MailStudio",
@@ -52,6 +60,8 @@
             ]
         }
     },
+    "minimum-stability": "alpha",
+    "prefer-stable": true,
     "config": {
         "allow-plugins": {
             "craftcms/plugin-installer": true

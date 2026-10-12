@@ -1,5 +1,7 @@
 # Mail Studio for Craft CMS 6
 
+Published by **wolkano**. Support: [dev@tosa.io](mailto:dev@tosa.io).
+
 Mail Studio manages source-aware transactional email content in the Craft control panel. Editors compose constrained blocks, preview HTML and plain text, send tests, then publish immutable revisions for Craft system messages, Freeform notifications, or explicit application sources.
 
 > Craft CMS 6 is unreleased. Mail Studio `0.1.x` is an alpha development line and its adapters may change with Craft.
@@ -27,11 +29,19 @@ For local path development:
 ```
 
 ```bash
-composer require yxanu/craft-mail-studio:@dev
+composer require wolkano/craft-mail-studio:@dev
 php artisan craft:plugin:install mail-studio pro
 ```
 
 The compiled files under `public/build` are part of the package. Consumers do not need Node.js.
+
+For the public alpha package on Packagist, the consuming Craft 6 project must permit alpha dependencies:
+
+```bash
+composer config minimum-stability alpha
+composer config prefer-stable true
+composer require wolkano/craft-mail-studio:^0.1@alpha
+```
 
 ## Public API
 
@@ -104,4 +114,4 @@ Built assets must be committed after editor changes. See [ARCHITECTURE.md](ARCHI
 
 ## Status
 
-The first planned public tag is `0.1.0-alpha.1`. Store pricing and edition approval are intentionally deferred until Craft 6 APIs stabilize and Pixel & Tonic approves the edition split.
+The `0.1.x` alpha line is published as `wolkano/craft-mail-studio`. The original `0.1.0-alpha.1` tag predates the publisher change. Craft Plugin Store approval and edition pricing remain pending until Craft 6 APIs stabilize and Pixel & Tonic approves the alpha-only dependencies and edition split.

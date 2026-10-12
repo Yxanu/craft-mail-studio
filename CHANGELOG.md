@@ -1,5 +1,12 @@
 # Release Notes for Mail Studio
 
+## 0.1.0-alpha.2 - 2026-10-12
+
+- Renamed the Composer package to `wolkano/craft-mail-studio` and identified wolkano as the publisher.
+- Added `dev@tosa.io` as the package support contact.
+- Allowed alpha dependencies when resolving this package for development and CI, preferring stable releases where available.
+- Documented installation from Packagist and the pending Craft Plugin Store approval.
+
 ## 0.1.0-alpha.1 - 2026-08-07
 
 - Added structured transactional email templates with HTML and plain-text rendering.
