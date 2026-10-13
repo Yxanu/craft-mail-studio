@@ -270,10 +270,19 @@ class TemplateRenderer
     private function safeUrl(string $url, bool $allowToken = false): string
     {
         $url = trim($url);
-        if ($url === '' || preg_match('/[\r\n]/', $url)) {
+        if ($url === '' || preg_match('/[\x00-\x1f\x7f\\\\]/', $url)) {
             return '';
         }
-        if (($allowToken && preg_match('/^{{\s*[a-zA-Z_][a-zA-Z0-9_.]*\s*}}$/', $url)) || str_starts_with($url, '/') || filter_var($url, FILTER_VALIDATE_URL)) {
+        if ($allowToken && preg_match('/^{{\s*[a-zA-Z_][a-zA-Z0-9_.]*\s*}}$/', $url)) {
+            return $url;
+        }
+        if (str_contains($url, ' ')) {
+            return '';
+        }
+        if (str_starts_with($url, '/') && ! str_starts_with($url, '//')) {
+            return $url;
+        }
+        if (in_array(strtolower((string) parse_url($url, PHP_URL_SCHEME)), ['http', 'https'], true) && filter_var($url, FILTER_VALIDATE_URL)) {
             return $url;
         }
 

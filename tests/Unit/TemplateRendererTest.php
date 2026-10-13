@@ -74,6 +74,49 @@ class TemplateRendererTest extends TestCase
         self::assertStringContainsString('Download: {{ downloadUrl }}', $rendered->text);
     }
 
+    public function test_it_removes_unsafe_urls_from_every_html_surface(): void
+    {
+        foreach ([
+            'javascript://example.test/%0Aalert(1)',
+            'file:///tmp/qa',
+            'ftp://example.test/file',
+            'data:text/html,unsafe',
+            '//example.test/file',
+            '/\\example.test/file',
+            "https://example.test/\tfile",
+            "https://example.test/\nfile",
+        ] as $url) {
+            $snapshot = $this->snapshot([
+                $this->block('button', ['label' => 'Unsafe button', 'url' => $url]),
+                $this->block('image', ['url' => $url, 'alt' => 'Unsafe image']),
+                $this->block('richText', ['html' => '<p><a href="'.htmlspecialchars($url, ENT_QUOTES).'">Link</a></p>']),
+            ]);
+            $snapshot['brand']['logoUrl'] = $url;
+            $rendered = (new TemplateRenderer)->render($snapshot, resolveTokens: false);
+
+            self::assertStringNotContainsString('href=', $rendered->html, $url);
+            self::assertStringNotContainsString('src=', $rendered->html, $url);
+            self::assertStringNotContainsString('Unsafe button', $rendered->text, $url);
+            self::assertStringNotContainsString('Unsafe image', $rendered->text, $url);
+            self::assertStringContainsString('Link', $rendered->text, $url);
+        }
+    }
+
+    public function test_it_keeps_http_https_and_root_relative_urls(): void
+    {
+        foreach (['https://example.test/file', 'http://example.test/file', '/downloads/file'] as $url) {
+            $rendered = (new TemplateRenderer)->render($this->snapshot([
+                $this->block('button', ['label' => 'Download', 'url' => $url]),
+                $this->block('image', ['url' => $url, 'alt' => 'Cover']),
+                $this->block('richText', ['html' => '<p><a href="'.$url.'">Link</a></p>']),
+            ]), resolveTokens: false);
+
+            self::assertStringContainsString('href="'.$url.'"', $rendered->html);
+            self::assertStringContainsString('src="'.$url.'"', $rendered->html);
+            self::assertStringContainsString('Download: '.$url, $rendered->text);
+        }
+    }
+
     /** @param array<int, array<string, mixed>> $blocks @return array<string, mixed> */
     private function snapshot(array $blocks): array
     {

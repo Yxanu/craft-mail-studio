@@ -2,6 +2,25 @@
 
 ## Unreleased
 
+## 0.1.0-alpha.4 - 2026-10-13
+
+### Fixed
+
+- Restricted rendered button, image, rich-text link, and brand-logo URLs to HTTP, HTTPS, and root-relative paths. Unsafe schemes, protocol-relative URLs, backslashes, and control characters are rejected, including URLs supplied through tokens.
+- Preserved the selected preview source when saving or publishing the same template, preventing source-specific tokens from breaking the refreshed preview.
+- Fixed test bootstrap discovery when running the packaged tests from a Composer vendor installation.
+
+### QA
+
+- Verified a fresh Packagist ZIP installation without path repositories or symlinks on Craft `6.0.0-alpha.20`, PHP `8.5.8`, and Laravel `13.36.0`.
+- Exercised draft/publish, token previews, mobile layout, Mailpit test delivery, required-variable validation, HTML escaping, and queued revision pinning with CC, Reply-To, and attachments.
+- Freeform integration is not included in this clean-install QA environment.
+
+### Compatibility
+
+- Requires PHP `^8.5` and Craft CMS `^6.0.0-alpha.20`; no database schema changes.
+- Alpha software for development use. Plugin Store approval and edition configuration remain pending.
+
 ## 0.1.0-alpha.3 - 2026-10-13
 
 ### Added

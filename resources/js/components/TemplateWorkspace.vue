@@ -45,13 +45,16 @@ let previewRequest = 0
 let previewObserver: ResizeObserver | null = null
 
 watch(() => props.template, template => {
+  const keepPreviewSource = template.id === draft.value.id && props.sources.some(item => item.key === sourceKey.value)
   const preferred = activeVariantIdentity.value
   const variant = template.variants.find(item => variantIdentity(item) === preferred) ?? template.variant
   draft.value = cloneDto(template)
   draft.value.variant = cloneDto(variant)
   activeVariantIdentity.value = variantIdentity(variant)
   selectedBlockId.value = draft.value.variant.document.blocks[0]?.id ?? null
-  sourceKey.value = draft.value.mappings[0]?.sourceKey ?? props.sources[0]?.key ?? ''
+  if (!keepPreviewSource) {
+    sourceKey.value = draft.value.mappings[0]?.sourceKey ?? props.sources[0]?.key ?? ''
+  }
   dirty.value = false
   nextTick(renderPreview)
 })
