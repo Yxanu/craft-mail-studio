@@ -36,7 +36,7 @@ function addItem() {
 
       <div v-else-if="block.type === 'richText'" class="ms-field-stack">
         <label class="ms-field"><span>Content</span></label>
-        <RichTextEditor v-model="block.data.html" @update:model-value="emit('change')" />
+        <RichTextEditor v-model="block.data.html" :disabled="disabled" @update:model-value="emit('change')" />
       </div>
 
       <div v-else-if="block.type === 'button'" class="ms-field-stack">
@@ -62,7 +62,7 @@ function addItem() {
         <div v-for="(item, index) in block.data.items" :key="index" class="ms-key-value-row">
           <input v-model="item.label" aria-label="Label" :disabled="disabled" @input="emit('change')">
           <input v-model="item.value" aria-label="Value" :disabled="disabled" @input="emit('change')">
-          <button type="button" class="ms-icon-btn ms-icon-btn--danger" title="Delete row" @click="block.data.items.splice(index, 1); emit('change')"><Trash2 :size="15" /></button>
+          <button type="button" class="ms-icon-btn ms-icon-btn--danger" title="Delete row" :disabled="disabled" @click="block.data.items.splice(index, 1); emit('change')"><Trash2 :size="15" /></button>
         </div>
         <button type="button" class="ms-btn ms-btn--secondary" :disabled="disabled" @click="addItem"><Plus :size="16" /> Add row</button>
       </div>
@@ -76,6 +76,7 @@ function addItem() {
             type="button"
             class="ms-token"
             :title="`Insert ${token}`"
+            :disabled="disabled"
             @click="insertToken(block.type === 'richText' ? 'html' : block.type === 'button' ? 'label' : block.type === 'callout' ? 'text' : 'text', token)"
           >{{ definition.label || token }}</button>
         </div>

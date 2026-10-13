@@ -22,6 +22,7 @@ readonly class AppController
             : 'templates';
 
         return (new CpScreenResponse)
+            ->inertiaPage('cp/Screen')
             ->title('Mail Studio')
             ->selectedSubnavItem($view)
             ->mainAttributes(['class' => ['mail-studio-screen']])

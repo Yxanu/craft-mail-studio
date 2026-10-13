@@ -33,9 +33,9 @@ class PresetLibrary
             'simple-message' => $this->preset(
                 'Simple message',
                 'A restrained transactional message with a single content area.',
-                'A message from {{ systemName }}',
+                'A message for you',
                 [
-                    $this->block('heading', ['text' => 'Hello {{ recipientName }}']),
+                    $this->block('heading', ['text' => 'Hello']),
                     $this->block('richText', ['html' => '<p>Here is the information you requested.</p>']),
                 ],
             ),
@@ -52,12 +52,12 @@ class PresetLibrary
             'internal-notification' => $this->preset(
                 'Internal notification',
                 'Compact operational notification for a team inbox.',
-                'New notification: {{ eventName }}',
+                'New notification',
                 [
-                    $this->block('heading', ['text' => 'New {{ eventName }}']),
+                    $this->block('heading', ['text' => 'New notification']),
                     $this->block('keyValue', ['items' => [
-                        ['label' => 'Name', 'value' => '{{ customerName }}'],
-                        ['label' => 'Email', 'value' => '{{ customerEmail }}'],
+                        ['label' => 'Name', 'value' => 'Customer name'],
+                        ['label' => 'Email', 'value' => 'customer@example.com'],
                     ]]),
                     $this->block('richText', ['html' => '<p>Review the details in Craft CMS.</p>']),
                 ],
@@ -76,13 +76,13 @@ class PresetLibrary
             'confirmation-receipt' => $this->preset(
                 'Confirmation or receipt',
                 'Confirmation with reference details and optional follow-up action.',
-                'Confirmation {{ reference }}',
+                'Your confirmation',
                 [
                     $this->block('heading', ['text' => 'Your confirmation']),
                     $this->block('richText', ['html' => '<p>Your request has been processed successfully.</p>']),
                     $this->block('keyValue', ['items' => [
-                        ['label' => 'Reference', 'value' => '{{ reference }}'],
-                        ['label' => 'Date', 'value' => '{{ date }}'],
+                        ['label' => 'Reference', 'value' => 'Reference number'],
+                        ['label' => 'Date', 'value' => 'Confirmation date'],
                     ]]),
                     $this->block('divider', ['spacing' => 24]),
                     $this->block('richText', ['html' => '<p>Keep this email for your records.</p>']),

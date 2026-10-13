@@ -8,12 +8,12 @@
     "dev": "vite"
   },
   "dependencies": {
-    "@tiptap/extension-link": "^3.29.2",
-    "@tiptap/starter-kit": "^3.29.2",
-    "@tiptap/vue-3": "^3.29.2",
+    "@tiptap/extension-link": "^3.31.4",
+    "@tiptap/starter-kit": "^3.31.4",
+    "@tiptap/vue-3": "^3.31.4",
     "@lucide/vue": "^1.30.0",
     "sortablejs": "^1.15.6",
-    "vue": "^3.5.22"
+    "vue": "^3.5.44"
   },
   "devDependencies": {
     "@types/sortablejs": "^1.15.8",

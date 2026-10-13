@@ -8,7 +8,7 @@ Mail Studio manages source-aware transactional email content in the Craft contro
 
 ## Requirements
 
-- Craft CMS `^6.0.0`
+- Craft CMS `^6.0.0-alpha.20` (native settings factory and form API)
 - PHP `^8.5`
 - Node.js 22+ only when rebuilding control panel assets
 

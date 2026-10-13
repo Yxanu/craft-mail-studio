@@ -5,6 +5,11 @@ declare(strict_types=1);
 namespace Yxanu\MailStudio;
 
 use CraftCms\Cms\Cp\Data\NavItem;
+use CraftCms\Cms\Form\Controls\Lightswitch;
+use CraftCms\Cms\Form\Controls\Text;
+use CraftCms\Cms\Form\Form;
+use CraftCms\Cms\Form\FormContext;
+use CraftCms\Cms\Form\Nodes\Field;
 use CraftCms\Cms\Plugin\Plugin;
 use CraftCms\Cms\User\Data\Permission;
 use Illuminate\Mail\Events\MessageSending;
@@ -12,8 +17,6 @@ use Illuminate\Support\Facades\Event;
 use Yxanu\MailStudio\Integrations\FreeformAdapter;
 use Yxanu\MailStudio\Listeners\OverrideSystemMessage;
 use Yxanu\MailStudio\Services\BrandProfileRepository;
-
-use function CraftCms\Cms\template;
 
 class MailStudio extends Plugin
 {
@@ -75,15 +78,17 @@ class MailStudio extends Plugin
         ];
     }
 
-    protected function createSettingsModel(): Settings
+    protected static function createSettings(): Settings
     {
         return new Settings;
     }
 
-    protected function settingsHtml(): ?string
+    public function settingsForm(FormContext $context = new FormContext): ?Form
     {
-        return template('mail-studio/_settings.twig', [
-            'settings' => $this->getSettings(),
+        return Form::make([
+            Field::make('Craft system messages', Lightswitch::make('enableSystemMessages')),
+            Field::make('Freeform notifications', Lightswitch::make('enableFreeform')),
+            Field::make('Default locale', Text::make('defaultLocale'))->required(),
         ]);
     }
 

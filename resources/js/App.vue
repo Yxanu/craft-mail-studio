@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { computed, onMounted, ref } from 'vue'
+import { computed, onBeforeUnmount, onMounted, ref } from 'vue'
 import { BookOpen, Cable, Download, LoaderCircle, Palette, Plus, Search, Upload, X } from '@lucide/vue'
 import { ApiClient } from './api'
 import type { BootstrapData } from './types'
@@ -25,6 +25,8 @@ const createPreset = ref('simple-message')
 const creating = ref(false)
 const importInput = ref<HTMLInputElement | null>(null)
 const notice = ref('')
+const workspaceDirty = ref(false)
+let navigationDeclinedUntil = 0
 
 const selectedTemplate = computed(() => data.value?.templates.find(template => template.id === selectedTemplateId.value) ?? null)
 const filteredTemplates = computed(() => data.value?.templates.filter(template => `${template.name} ${template.handle}`.toLowerCase().includes(templateQuery.value.toLowerCase())) ?? [])
@@ -45,11 +47,52 @@ async function load(selectId?: number) {
 }
 
 function changeView(next: 'templates' | 'sources' | 'brand') {
+  if (next === view.value) return
+  if (!confirmDiscardChanges()) return
+  workspaceDirty.value = false
   view.value = next
   const url = new URL(window.location.href)
   if (next === 'templates') url.searchParams.delete('view')
   else url.searchParams.set('view', next)
   window.history.replaceState({}, '', url)
+}
+
+function selectTemplate(id: number) {
+  if (id === selectedTemplateId.value) return
+  if (!confirmDiscardChanges()) return
+  workspaceDirty.value = false
+  selectedTemplateId.value = id
+}
+
+function confirmDiscardChanges() {
+  return !workspaceDirty.value || window.confirm('Discard unsaved template changes?')
+}
+
+function openImport() {
+  if (confirmDiscardChanges()) importInput.value?.click()
+}
+
+function handleDeleted() {
+  workspaceDirty.value = false
+  load()
+}
+
+function handleBeforeUnload(event: BeforeUnloadEvent) {
+  if (!workspaceDirty.value) return
+  event.preventDefault()
+}
+
+function handleBeforeNavigate(event: Event) {
+  if (event.defaultPrevented) return
+  // Craft's compatibility navigation can initiate two visits from one click.
+  if (performance.now() < navigationDeclinedUntil) {
+    event.preventDefault()
+    return
+  }
+  if (!confirmDiscardChanges()) {
+    navigationDeclinedUntil = performance.now() + 500
+    event.preventDefault()
+  }
 }
 
 function openCreate() {
@@ -93,7 +136,15 @@ async function importData(event: Event) {
   }
 }
 
-onMounted(load)
+onMounted(() => {
+  load()
+  window.addEventListener('beforeunload', handleBeforeUnload)
+  document.addEventListener('inertia:before', handleBeforeNavigate)
+})
+onBeforeUnmount(() => {
+  window.removeEventListener('beforeunload', handleBeforeUnload)
+  document.removeEventListener('inertia:before', handleBeforeNavigate)
+})
 </script>
 
 <template>
@@ -102,11 +153,11 @@ onMounted(load)
     <div v-else-if="!data" class="ms-alert ms-alert--error">{{ error || 'Mail Studio could not be loaded.' }}</div>
     <template v-else>
       <nav class="ms-view-tabs" aria-label="Mail Studio views">
-        <button type="button" :class="{ active: view === 'templates' }" @click="changeView('templates')"><BookOpen :size="17" /> Templates</button>
-        <button type="button" :class="{ active: view === 'sources' }" @click="changeView('sources')"><Cable :size="17" /> Sources</button>
-        <button type="button" :class="{ active: view === 'brand' }" @click="changeView('brand')"><Palette :size="17" /> Brand</button>
+        <button type="button" aria-label="Templates" :class="{ active: view === 'templates' }" @click="changeView('templates')"><BookOpen :size="17" /><span>Templates</span></button>
+        <button type="button" aria-label="Sources" :class="{ active: view === 'sources' }" @click="changeView('sources')"><Cable :size="17" /><span>Sources</span></button>
+        <button type="button" aria-label="Brand" :class="{ active: view === 'brand' }" @click="changeView('brand')"><Palette :size="17" /><span>Brand</span></button>
         <span v-if="data.isPro && data.permissions.manage" class="ms-tab-actions">
-          <button type="button" class="ms-icon-btn" title="Import Mail Studio JSON" @click="importInput?.click()"><Upload :size="17" /></button>
+          <button type="button" class="ms-icon-btn" title="Import Mail Studio JSON" @click="openImport"><Upload :size="17" /></button>
           <button type="button" class="ms-icon-btn" title="Export Mail Studio JSON" @click="exportData"><Download :size="17" /></button>
           <input ref="importInput" class="ms-visually-hidden" type="file" accept="application/json,.json" @change="importData">
         </span>
@@ -129,7 +180,7 @@ onMounted(load)
               :key="template.id"
               type="button"
               :class="['ms-template-item', { active: template.id === selectedTemplateId }]"
-              @click="selectedTemplateId = template.id"
+              @click="selectTemplate(template.id)"
             >
               <span>{{ template.name }}</span>
               <small>{{ template.handle }}</small>
@@ -150,7 +201,8 @@ onMounted(load)
           :default-locale="data.defaultLocale"
           :api="api"
           @refresh="load"
-          @deleted="load()"
+          @deleted="handleDeleted"
+          @dirty-change="workspaceDirty = $event"
         />
         <div v-else class="ms-empty-state">
           <BookOpen :size="28" />

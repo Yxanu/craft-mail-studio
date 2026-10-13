@@ -1,6 +1,6 @@
 <script setup lang="ts">
-import { computed, nextTick, onMounted, ref, watch } from 'vue'
-import { Check, Clock3, Globe2, Mail, Monitor, Plus, Save, Send, Smartphone, Trash2, X } from '@lucide/vue'
+import { computed, nextTick, onBeforeUnmount, onMounted, ref, watch } from 'vue'
+import { Check, Clock3, Globe2, LoaderCircle, Mail, Maximize2, Monitor, Plus, Save, Send, Smartphone, Trash2, X } from '@lucide/vue'
 import { ApiClient } from '../api'
 import { cloneDto } from '../clone'
 import type { BrandProfile, EmailBlock, EmailTemplate, SiteDefinition, SourceDefinition, TemplateVariant } from '../types'
@@ -17,7 +17,7 @@ const props = defineProps<{
   defaultLocale: string
   api: ApiClient
 }>()
-const emit = defineEmits<{ refresh: [selectId?: number]; deleted: [] }>()
+const emit = defineEmits<{ refresh: [selectId?: number]; deleted: []; 'dirty-change': [dirty: boolean] }>()
 
 const draft = ref<EmailTemplate>(cloneDto(props.template))
 const selectedBlockId = ref<string | null>(draft.value.variant.document.blocks[0]?.id ?? null)
@@ -28,15 +28,21 @@ const previewMode = ref<'desktop' | 'mobile'>('desktop')
 const showText = ref(false)
 const busy = ref(false)
 const dirty = ref(false)
+const previewing = ref(false)
 const message = ref('')
 const error = ref('')
+const previewStage = ref<HTMLElement | null>(null)
+const previewBounds = ref({ width: 0, height: 0 })
 const testDialog = ref<HTMLDialogElement | null>(null)
 const variantDialog = ref<HTMLDialogElement | null>(null)
+const previewDialog = ref<HTMLDialogElement | null>(null)
 const testEmail = ref('admin@example.test')
 const activeVariantIdentity = ref(variantIdentity(draft.value.variant))
 const newVariantSiteId = ref<number | null>(props.sites[0]?.id ?? null)
 const newVariantLocale = ref(props.sites[0]?.language ?? props.defaultLocale)
 let previewTimer: number | undefined
+let previewRequest = 0
+let previewObserver: ResizeObserver | null = null
 
 watch(() => props.template, template => {
   const preferred = activeVariantIdentity.value
@@ -52,6 +58,23 @@ watch(() => props.template, template => {
 
 const selectedBlock = computed(() => draft.value.variant.document.blocks.find(block => block.id === selectedBlockId.value) ?? null)
 const source = computed(() => props.sources.find(item => item.key === sourceKey.value) ?? null)
+const previewTargetWidth = computed(() => previewMode.value === 'mobile' ? 390 : 640)
+const previewScale = computed(() => {
+  if (!previewBounds.value.width) return 1
+  return Math.min(1, previewBounds.value.width / previewTargetWidth.value)
+})
+const previewTargetHeight = computed(() => Math.max(620, Math.ceil((previewBounds.value.height || 620) / previewScale.value)))
+const previewCanvasStyle = computed(() => ({
+  width: `${Math.round(previewTargetWidth.value * previewScale.value)}px`,
+  height: `${Math.round(previewTargetHeight.value * previewScale.value)}px`,
+}))
+const previewFrameStyle = computed(() => ({
+  width: `${previewTargetWidth.value}px`,
+  height: `${previewTargetHeight.value}px`,
+  transform: `scale(${previewScale.value})`,
+}))
+
+watch(dirty, value => emit('dirty-change', value))
 
 function variantIdentity(variant: Pick<TemplateVariant, 'siteId' | 'locale'>) {
   return `${variant.siteId ?? 'global'}:${variant.locale ?? 'default'}`
@@ -133,16 +156,22 @@ function setBlocks(blocks: EmailBlock[]) {
 }
 
 async function renderPreview() {
+  const request = ++previewRequest
   error.value = ''
+  previewing.value = true
   try {
     const result = await props.api.post<{ html: string; text: string }>(`/templates/${draft.value.id}/preview`, {
       ...payload(),
       variables: source.value?.sampleData ?? {},
     })
+    if (request !== previewRequest) return
     previewHtml.value = result.html
     previewText.value = result.text
   } catch (exception) {
+    if (request !== previewRequest) return
     error.value = (exception as Error).message
+  } finally {
+    if (request === previewRequest) previewing.value = false
   }
 }
 
@@ -218,7 +247,24 @@ async function destroyTemplate() {
   emit('deleted')
 }
 
-onMounted(renderPreview)
+onMounted(async () => {
+  await nextTick()
+  if (previewStage.value) {
+    previewObserver = new ResizeObserver(([entry]) => {
+      previewBounds.value = {
+        width: entry.contentRect.width,
+        height: entry.contentRect.height,
+      }
+    })
+    previewObserver.observe(previewStage.value)
+  }
+  renderPreview()
+})
+onBeforeUnmount(() => {
+  window.clearTimeout(previewTimer)
+  previewObserver?.disconnect()
+  emit('dirty-change', false)
+})
 </script>
 
 <template>
@@ -268,14 +314,20 @@ onMounted(renderPreview)
             <button type="button" :class="{ active: !showText }" @click="showText = false">HTML</button>
             <button type="button" :class="{ active: showText }" @click="showText = true">Plain text</button>
           </div>
-          <div v-if="!showText" class="ms-segmented ms-segmented--icons">
-            <button type="button" title="Desktop preview" :class="{ active: previewMode === 'desktop' }" @click="previewMode = 'desktop'"><Monitor :size="16" /></button>
-            <button type="button" title="Mobile preview" :class="{ active: previewMode === 'mobile' }" @click="previewMode = 'mobile'"><Smartphone :size="16" /></button>
+          <div class="ms-preview-toolbar__end">
+            <span v-if="previewing" class="ms-preview-status"><LoaderCircle class="ms-spin" :size="14" /><span>Updating</span></span>
+            <div v-if="!showText" class="ms-segmented ms-segmented--icons">
+              <button type="button" title="Desktop preview" :class="{ active: previewMode === 'desktop' }" @click="previewMode = 'desktop'"><Monitor :size="16" /></button>
+              <button type="button" title="Mobile preview" :class="{ active: previewMode === 'mobile' }" @click="previewMode = 'mobile'"><Smartphone :size="16" /></button>
+            </div>
+            <button v-if="!showText" type="button" class="ms-icon-btn ms-icon-btn--bordered ms-preview-expand" title="Open large preview" @click="previewDialog?.showModal()"><Maximize2 :size="16" /></button>
           </div>
         </div>
         <div v-if="showText" class="ms-text-preview"><pre>{{ previewText }}</pre></div>
-        <div v-else class="ms-preview-stage">
-          <iframe title="Email preview" :class="['ms-preview-frame', `ms-preview-frame--${previewMode}`]" :srcdoc="previewHtml" sandbox="allow-popups" />
+        <div v-show="!showText" ref="previewStage" class="ms-preview-stage">
+          <div class="ms-preview-canvas" :style="previewCanvasStyle">
+            <iframe title="Email preview" class="ms-preview-frame" :style="previewFrameStyle" :srcdoc="previewHtml" sandbox="allow-popups" />
+          </div>
         </div>
       </section>
     </div>
@@ -291,6 +343,13 @@ onMounted(renderPreview)
         </div>
       </div>
     </section>
+
+    <dialog ref="previewDialog" class="ms-dialog ms-preview-dialog">
+      <div class="ms-preview-dialog__content">
+        <header><div><h2>Email preview</h2><p>{{ draft.variant.subject }}</p></div><button type="button" class="ms-icon-btn" title="Close" @click="previewDialog?.close()"><X :size="18" /></button></header>
+        <iframe title="Large email preview" :srcdoc="previewHtml" sandbox="allow-popups" />
+      </div>
+    </dialog>
 
     <dialog ref="testDialog" class="ms-dialog">
       <form method="dialog" @submit.prevent="sendTest">

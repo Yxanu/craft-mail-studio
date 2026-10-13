@@ -11,7 +11,7 @@ use Yxanu\MailStudio\Http\Controllers\MappingController;
 use Yxanu\MailStudio\Http\Controllers\PreviewController;
 use Yxanu\MailStudio\Http\Controllers\TemplateController;
 
-Route::prefix('mail-studio')->name('mail-studio.')->group(function (): void {
+Route::middleware(['auth', 'can:accessCp'])->prefix('mail-studio')->name('mail-studio.')->group(function (): void {
     Route::get('/', AppController::class)->name('index');
 
     Route::prefix('api')->name('api.')->group(function (): void {

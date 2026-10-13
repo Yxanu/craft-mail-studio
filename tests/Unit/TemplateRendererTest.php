@@ -7,10 +7,25 @@ namespace Yxanu\MailStudio\Tests\Unit;
 use InvalidArgumentException;
 use PHPUnit\Framework\TestCase;
 use Yxanu\MailStudio\Services\BrandProfileRepository;
+use Yxanu\MailStudio\Services\PresetLibrary;
 use Yxanu\MailStudio\Services\TemplateRenderer;
 
 class TemplateRendererTest extends TestCase
 {
+    public function test_generic_presets_do_not_require_source_specific_tokens(): void
+    {
+        foreach ((new PresetLibrary)->all(false) as $preset) {
+            $rendered = (new TemplateRenderer)->render([
+                ...$preset,
+                'brand' => BrandProfileRepository::defaultConfig(),
+                'allowedTokens' => [],
+            ], resolveTokens: false);
+
+            self::assertNotEmpty($rendered->html);
+            self::assertNotEmpty($rendered->text);
+        }
+    }
+
     public function test_it_renders_email_safe_html_and_plain_text(): void
     {
         $rendered = (new TemplateRenderer)->render($this->snapshot([
