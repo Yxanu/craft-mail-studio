@@ -114,4 +114,6 @@ Built assets must be committed after editor changes. See [ARCHITECTURE.md](ARCHI
 
 ## Status
 
+The current pre-release is [`0.1.0-alpha.3`](https://github.com/Yxanu/craft-mail-studio/releases/tag/0.1.0-alpha.3), tested with Craft `6.0.0-alpha.20`. See [CHANGELOG.md](CHANGELOG.md) for changes and compatibility notes.
+
 The `0.1.x` alpha line is published as `wolkano/craft-mail-studio`. The original `0.1.0-alpha.1` tag predates the publisher change. Craft Plugin Store approval and edition pricing remain pending until Craft 6 APIs stabilize and Pixel & Tonic approves the alpha-only dependencies and edition split.
