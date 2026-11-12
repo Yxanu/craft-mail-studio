@@ -25,7 +25,7 @@
     },
     "require": {
         "php": "^8.5",
-        "craftcms/cms": "^6.0.0-alpha.20"
+        "craftcms/cms": "^6.0.0-beta.1"
     },
     "require-dev": {
         "laravel/pint": "^1.27",
@@ -60,7 +60,7 @@
             ]
         }
     },
-    "minimum-stability": "alpha",
+    "minimum-stability": "beta",
     "prefer-stable": true,
     "config": {
         "allow-plugins": {

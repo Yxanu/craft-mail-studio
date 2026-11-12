@@ -2,6 +2,15 @@
 
 ## Unreleased
 
+## 0.1.0-beta.1 - 2026-11-13
+
+### Changed
+
+- Target Craft CMS `6.0.0-beta.1` and newer Craft 6 releases. Craft 6 alpha projects should stay on Mail Studio `0.1.0-alpha.4` until they upgrade.
+- Update Vite to `7.3.8` and rebuild the bundled control panel assets.
+
+No Mail Studio database schema changes are included in this release.
+
 ## 0.1.0-alpha.4 - 2026-10-13
 
 ### Fixed

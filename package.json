@@ -1,7 +1,7 @@
 {
   "name": "@yxanu/craft-mail-studio",
   "private": true,
-  "version": "0.1.0-alpha.4",
+  "version": "0.1.0-beta.1",
   "type": "module",
   "scripts": {
     "build": "vue-tsc --noEmit && vite build",
@@ -19,7 +19,7 @@
     "@types/sortablejs": "^1.15.8",
     "@vitejs/plugin-vue": "^6.0.1",
     "typescript": "^5.9.3",
-    "vite": "^7.1.9",
+    "vite": "^7.3.8",
     "vue-tsc": "^3.1.1"
   }
 }

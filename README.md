@@ -4,11 +4,11 @@ Published by **wolkano**. Support: [dev@tosa.io](mailto:dev@tosa.io).
 
 Mail Studio manages source-aware transactional email content in the Craft control panel. Editors compose constrained blocks, preview HTML and plain text, send tests, then publish immutable revisions for Craft system messages, Freeform notifications, or explicit application sources.
 
-> Craft CMS 6 is unreleased. Mail Studio `0.1.x` is an alpha development line and its adapters may change with Craft.
+> Craft CMS 6 and Mail Studio are in beta. APIs and adapters may change before the stable releases.
 
 ## Requirements
 
-- Craft CMS `^6.0.0-alpha.20` (native settings factory and form API)
+- Craft CMS `^6.0.0-beta.1`
 - PHP `^8.5`
 - Node.js 22+ only when rebuilding control panel assets
 
@@ -35,12 +35,13 @@ php artisan craft:plugin:install mail-studio pro
 
 The compiled files under `public/build` are part of the package. Consumers do not need Node.js.
 
-For the public alpha package on Packagist, the consuming Craft 6 project must permit alpha dependencies:
+For the public beta package on Packagist, the consuming Craft 6 project must permit beta dependencies:
 
 ```bash
-composer config minimum-stability alpha
+composer config minimum-stability beta
 composer config prefer-stable true
-composer require wolkano/craft-mail-studio:^0.1@alpha
+composer require wolkano/craft-mail-studio:^0.1@beta
+php artisan craft:plugin:install mail-studio
 ```
 
 ## Public API
@@ -116,6 +117,6 @@ Built assets must be committed after editor changes. See [ARCHITECTURE.md](ARCHI
 
 ## Status
 
-The current pre-release is [`0.1.0-alpha.4`](https://github.com/Yxanu/craft-mail-studio/releases/tag/0.1.0-alpha.4), tested with Craft `6.0.0-alpha.20`. See [CHANGELOG.md](CHANGELOG.md) for changes and compatibility notes.
+The current pre-release is [`0.1.0-beta.1`](https://github.com/Yxanu/craft-mail-studio/releases/tag/0.1.0-beta.1), targeting Craft `6.0.0-beta.1`. For Craft `6.0.0-alpha.20`, use [`0.1.0-alpha.4`](https://github.com/Yxanu/craft-mail-studio/releases/tag/0.1.0-alpha.4). See [CHANGELOG.md](CHANGELOG.md) for compatibility notes.
 
-The `0.1.x` alpha line is published as `wolkano/craft-mail-studio`. The original `0.1.0-alpha.1` tag predates the publisher change. Craft Plugin Store approval and edition pricing remain pending until Craft 6 APIs stabilize and Pixel & Tonic approves the alpha-only dependencies and edition split.
+The `0.1.x` pre-release line is published as `wolkano/craft-mail-studio`. The original `0.1.0-alpha.1` tag predates the publisher change. Craft Plugin Store approval and edition pricing remain pending; the beta is distributed via GitHub and Packagist.
