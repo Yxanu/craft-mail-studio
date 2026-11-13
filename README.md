@@ -117,6 +117,6 @@ Built assets must be committed after editor changes. See [ARCHITECTURE.md](ARCHI
 
 ## Status
 
-The current pre-release is [`0.1.0-beta.1`](https://github.com/Yxanu/craft-mail-studio/releases/tag/0.1.0-beta.1), targeting Craft `6.0.0-beta.1`. For Craft `6.0.0-alpha.20`, use [`0.1.0-alpha.4`](https://github.com/Yxanu/craft-mail-studio/releases/tag/0.1.0-alpha.4). See [CHANGELOG.md](CHANGELOG.md) for compatibility notes.
+The current pre-release is [`0.1.0-beta.2`](https://github.com/Yxanu/craft-mail-studio/releases/tag/0.1.0-beta.2), targeting Craft `6.0.0-beta.1`. For Craft `6.0.0-alpha.20`, use [`0.1.0-alpha.4`](https://github.com/Yxanu/craft-mail-studio/releases/tag/0.1.0-alpha.4). See [CHANGELOG.md](CHANGELOG.md) for compatibility notes.
 
 The `0.1.x` pre-release line is published as `wolkano/craft-mail-studio`. The original `0.1.0-alpha.1` tag predates the publisher change. Craft Plugin Store approval and edition pricing remain pending; the beta is distributed via GitHub and Packagist.

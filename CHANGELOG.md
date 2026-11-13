@@ -2,6 +2,12 @@
 
 ## Unreleased
 
+## 0.1.0-beta.2 - 2026-11-13
+
+### Fixed
+
+- Use Craft 6 Beta's `settingsUi()` API so the Mail Studio settings page opens and saves its existing settings.
+
 ## 0.1.0-beta.1 - 2026-11-13
 
 ### Changed

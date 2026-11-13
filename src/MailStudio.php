@@ -5,12 +5,12 @@ declare(strict_types=1);
 namespace Yxanu\MailStudio;
 
 use CraftCms\Cms\Cp\Data\NavItem;
-use CraftCms\Cms\Form\Controls\Lightswitch;
-use CraftCms\Cms\Form\Controls\Text;
-use CraftCms\Cms\Form\Form;
-use CraftCms\Cms\Form\FormContext;
-use CraftCms\Cms\Form\Nodes\Field;
 use CraftCms\Cms\Plugin\Plugin;
+use CraftCms\Cms\Ui\Controls\Lightswitch;
+use CraftCms\Cms\Ui\Controls\Text;
+use CraftCms\Cms\Ui\Nodes\Field;
+use CraftCms\Cms\Ui\Ui;
+use CraftCms\Cms\Ui\UiContext;
 use CraftCms\Cms\User\Data\Permission;
 use Illuminate\Mail\Events\MessageSending;
 use Illuminate\Support\Facades\Event;
@@ -83,9 +83,9 @@ class MailStudio extends Plugin
         return new Settings;
     }
 
-    public function settingsForm(FormContext $context = new FormContext): ?Form
+    public function settingsUi(UiContext $context = new UiContext): Ui
     {
-        return Form::make([
+        return Ui::make([
             Field::make('Craft system messages', Lightswitch::make('enableSystemMessages')),
             Field::make('Freeform notifications', Lightswitch::make('enableFreeform')),
             Field::make('Default locale', Text::make('defaultLocale'))->required(),
