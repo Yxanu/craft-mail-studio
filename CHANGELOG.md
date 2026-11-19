@@ -1,12 +1,14 @@
 # Release Notes for Mail Studio
 
-## Unreleased
+## 0.1.0-beta.3 - 2026-11-19
 
 ### Changed
 
 - Adopt the cobalt postage-stamp icon, showing the heading, text, and button blocks of a template.
 - Use a simplified, single-color stamp mask for Craft's control panel navigation.
 - Add outlined light and dark Mail Studio by wolkano wordmarks to the README.
+
+No database schema changes are included in this release. Requires PHP `^8.5` and Craft CMS `^6.0.0-beta.1`.
 
 ## 0.1.0-beta.2 - 2026-11-13
 
