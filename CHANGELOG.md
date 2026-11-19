@@ -2,6 +2,12 @@
 
 ## Unreleased
 
+### Changed
+
+- Adopt the cobalt postage-stamp icon, showing the heading, text, and button blocks of a template.
+- Use a simplified, single-color stamp mask for Craft's control panel navigation.
+- Add outlined light and dark Mail Studio by wolkano wordmarks to the README.
+
 ## 0.1.0-beta.2 - 2026-11-13
 
 ### Fixed

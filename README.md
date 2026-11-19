@@ -1,8 +1,17 @@
+<picture>
+  <source media="(prefers-color-scheme: dark)" srcset="resources/brand/mail-studio-logo-dark.svg">
+  <img src="resources/brand/mail-studio-logo.svg" alt="Mail Studio by wolkano" width="540">
+</picture>
+
 # Mail Studio for Craft CMS 6
+
+**Transactional email, composed in Craft.**
 
 Published by **wolkano**. Support: [dev@tosa.io](mailto:dev@tosa.io).
 
 Mail Studio manages source-aware transactional email content in the Craft control panel. Editors compose constrained blocks, preview HTML and plain text, send tests, then publish immutable revisions for Craft system messages, Freeform notifications, or explicit application sources.
+
+Mail Studio runs inside your Craft installation, not as an adapter for a separate hosted template service. Email delivery uses your configured Craft mail transport; any mail-provider fees are separate.
 
 > Craft CMS 6 and Mail Studio are in beta. APIs and adapters may change before the stable releases.
 
